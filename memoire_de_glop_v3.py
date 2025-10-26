@@ -194,6 +194,7 @@ class QuadGridNodesApp:
 
         self.sct = mss.mss()
         self.vmon = self.sct.monitors[0]
+        self.pixel_ratio = self._detect_pixel_ratio()
 
         self.show_dofus_gate()
         self.root.protocol("WM_DELETE_WINDOW", self.on_quit)
@@ -224,6 +225,25 @@ class QuadGridNodesApp:
     def load_points_from_ratios(self, ratios):
         x, y, w, h = self.target_rect
         return [(int(x + rx * w), int(y + ry * h)) for (rx, ry) in ratios]
+
+    def _detect_pixel_ratio(self) -> float:
+        if not IS_MAC:
+            return 1.0
+        try:
+            logical_w = max(1, int(self.root.winfo_screenwidth()))
+            physical_w = int(self.vmon.get("width", logical_w))
+            ratio = float(physical_w) / float(logical_w)
+            if ratio < 1.0:
+                ratio = 1.0
+            return ratio
+        except Exception:
+            return 1.0
+
+    def _logical_to_physical_point(self, point: Tuple[float, float]) -> Tuple[int, int]:
+        x, y = point
+        if self.pixel_ratio == 1.0:
+            return int(round(x)), int(round(y))
+        return int(round(x * self.pixel_ratio)), int(round(y * self.pixel_ratio))
 
     def scan_dofus_windows(self) -> List[Dict[str, object]]:
         entries: List[Dict[str, object]] = []
@@ -619,8 +639,8 @@ class QuadGridNodesApp:
     def on_space(self, event=None):
         if self.mode != "config" or self._next_point_index >= 4:
             return
-        x, y = self.root.winfo_pointerx(), self.root.winfo_pointery()
-        self.points[self._next_point_index] = (x, y)
+        coords = self._logical_to_physical_point((self.root.winfo_pointerx(), self.root.winfo_pointery()))
+        self.points[self._next_point_index] = coords
         self._next_point_index += 1
         self._update_preview_image()
         if self._next_point_index < 4:
@@ -694,6 +714,7 @@ class QuadGridNodesApp:
     def update_tile_from_intersection(self, sx, sy):
         if self.grid is None:
             return
+        sx, sy = self._logical_to_physical_point((sx, sy))
         (px, py), (j, i) = closest_point_with_indices(self.grid, (sx, sy))
         self.read_params()
         half = self.cell // 2

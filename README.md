@@ -37,11 +37,12 @@ Raccourcis : `R` pour réinitialiser les captures, `Espace` pour définir les c
 | Fonctionnalité                              | Windows                                    | macOS                                               | Linux                                               |
 |---------------------------------------------|--------------------------------------------|-----------------------------------------------------|-----------------------------------------------------|
 | Détection automatique de la fenêtre Dofus   | Oui (via `pywin32`)                        | Non : capture plein écran                           | Non : capture plein écran                           |
-| Mise à l’échelle DPI                         | Oui (API Windows)                          | Géré via Tkinter (selon config système)             | Géré via Tkinter                                   |
+| Mise à l’échelle DPI                         | Oui (API Windows)                          | Géré via Tkinter + correction Retina               | Géré via Tkinter                                   |
 | Autorisations système                       | Aucune spécifique                          | Screen Recording + Accessibility requises           | Peut nécessiter accès X11 complet                  |
 | Global mouse listener (`pynput`)            | Support natif                              | Peut demander l’activation d’“Input Monitoring”     | Fonctionne sous X11 (Wayland : support limité)     |
 
 - Sur macOS/Linux, la fenêtre de jeu ne peut pas être identifiée automatiquement : définissez les coins de la grille pour cadrer la capture.
+- Sur écrans Retina, les coordonnées logiques/pixels sont réconciliées automatiquement ; pensez malgré tout à positionner la fenêtre du jeu sur l’écran principal si vous avez plusieurs dalles aux échelles différentes.
 - Sous Wayland ou sur certains environnements sécurisés, `mss`/`pynput` peuvent être bloqués ; utilisez X11/XWayland ou accordez les privilèges nécessaires.
 - L’animation repose sur la capture d’écran : un framerate très bas ou des permissions insuffisantes donneront des tuiles statiques.
 
