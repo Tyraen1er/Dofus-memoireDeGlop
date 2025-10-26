@@ -1,0 +1,5 @@
+mss
+pillow
+pynput
+psutil
+pywin32; platform_system == "Windows"
