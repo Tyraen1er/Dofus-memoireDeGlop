@@ -1,6 +1,6 @@
-# Dofus-memoireDeGlop
+# Dofus-memoireDeBlop
 
-Assistant visuel pour le mini-jeu “Mémoire de Glop” de Dofus.  
+Assistant visuel pour le mini-jeu “Mémoire de Blop” de Dofus.  
 L’application capture les tuiles cliquées, conserve une courte séquence de leurs évolutions (2 s à 0,2 s d’intervalle) et affiche la grille dans une fenêtre compacte (35 % de la surface d’écran).
 
 ## Installation
@@ -21,7 +21,7 @@ L’application capture les tuiles cliquées, conserve une courte séquence de l
 ## Utilisation
 
 ```bash
-python3 memoire_de_glop_v3.py
+python3 memoire_de_blop.py
 ```
 
 - **Mode configuration** : définissez les quatre coins de la grille via ESPACE, ou utilisez la config par défaut.
